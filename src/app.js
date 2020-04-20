@@ -55,11 +55,31 @@ app.put("/repositories/:id", (request, response) => {
 });
 
 app.delete("/repositories/:id", (request, response) => {
-  // TODO
+  const { id } = request.params;
+
+  const repoIndex = repositories.findIndex(repo => repo.id === id);
+
+  if (repoIndex < 0) {
+    return response.status(400).json({ error: 'Repository not found.' });
+  }
+
+  repositories.splice(repoIndex, 1);
+
+  return response.status(204).send();
 });
 
 app.post("/repositories/:id/like", (request, response) => {
-  // TODO
+  const { id } = request.params;
+
+  const repoIndex = repositories.findIndex(repo => repo.id === id);
+
+  if (repoIndex < 0) {
+    return response.status(400).json({ error: 'Repository not found.' });
+  }
+
+  repositories[repoIndex].likes += 1;
+
+  return response.json(repositories[repoIndex]);
 });
 
 module.exports = app;
